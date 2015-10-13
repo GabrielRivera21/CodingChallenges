@@ -5,7 +5,8 @@ import java.util.NoSuchElementException;
 
 
 public class NestedLists {
-
+	
+	//List: {1, 2, {3, 4, {{5, 6}, 7, 8}, 9}, 10}
 	public static void main(String[] args) {
 		List<Object> list = new ArrayList<>();
 		List<Object> innerlist = new ArrayList<>();
@@ -13,12 +14,17 @@ public class NestedLists {
 		list.add(2);
 		innerlist.add(3);
 		innerlist.add(4);
+		List<Object> anotherlist = new ArrayList<>();
+		anotherlist.add(5);
+		anotherlist.add(6);
 		List<Object> otherlist = new ArrayList<>();
-		otherlist.add(5);
-		otherlist.add(6);
+		otherlist.add(anotherlist);
+		otherlist.add(7);
+		otherlist.add(8);
 		innerlist.add(otherlist);
+		innerlist.add(9);
 		list.add(innerlist);
-		list.add(7);
+		list.add(10);
 		
 		Iterator<Object> iterator = iterator(list);
 		while(iterator.hasNext()) {
@@ -61,7 +67,10 @@ class EmbeddedListIterator implements Iterator<Object> {
 		Object item = list.get(currentPos++);
 		if(item instanceof List){
 			iterator = new EmbeddedListIterator((List<Object>) item);
-			return iterator.next();
+			item = iterator.next();
+			if(!iterator.hasNext())
+				iterator = null;
+			return item;
 		}
 		return item;
 	}
